@@ -2,4 +2,5 @@ import project as p
 
 
 p.prepare("stocks")
-#p.stock_stats("AAPL")
+p.stock_stats("NFLX")
+

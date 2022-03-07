@@ -7,7 +7,7 @@ def start_mergesort(unsorted_data):
     p = 0
     r = len(unsorted_data) - 1
 
-    sorted_data = mergesort(unsorted_data, p , r)
+    sorted_data = mergesort(unsorted_data, p, r)
 
     return sorted_data
 
@@ -19,3 +19,10 @@ def mergesort(d, p, r):
         mergesort(d, q+1, r)
     else:
         #sort (bubblesort?)
+        n = len(d)
+        for i in range(n-1):
+            for j in range(0, n-i-1):
+                if (d[j][2] > d[j+1][2]):       # Comparing value of the data
+                    d[j], d[j+1] = d[j+1], d[j]
+
+    return d

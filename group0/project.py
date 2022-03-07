@@ -1,4 +1,6 @@
-import utils
+from utils import start_mergesort, mergesort
+
+import utils as u
 
 # Global data to store information
 stocks = {}
@@ -32,6 +34,7 @@ def prepare(filename : str):
             stocks[set[0]] = len(stocks)
             sorted_data.append([set])
 
+    print(sorted_data)
     print('Done'.format(filename))
 
 
@@ -49,9 +52,20 @@ def stock_stats(stockName : str):
     meanprice = 0
     maxprice = 0
 
-    print(data[0][0])
-    stocks = [stock for stock in data if stockName is stock[0]]
-    print(stocks)
+    unsorted_dataStock = sorted_data[stocks[stockName]]
+
+    sorted_dataStock = u.start_mergesort(unsorted_dataStock)
+    print(sorted_dataStock)
+
+    minprice = sorted_dataStock[0][2]
+    maxprice = sorted_dataStock[-1][2]
+
+    summedPrice = 0
+    for data in sorted_dataStock:
+        summedPrice += int(data[2])
+
+    meanprice = summedPrice / len(sorted_dataStock)
+
 
     print("Min-price : {}, Mean-Price : {}, Max-Price : {} for stock : {}".format(minprice, meanprice, maxprice, stockName))
 
