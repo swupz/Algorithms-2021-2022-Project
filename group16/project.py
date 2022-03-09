@@ -1,4 +1,4 @@
-import utils as u
+import group16.utils as u
 
 # Global data to store information
 stocks = {}
@@ -13,7 +13,7 @@ def prepare(filename : str):
     your_variables_here = 'Somebody'
 
     global ds, data
-    ds = open("../data/small_dataset.txt", "r")
+    ds = open(filename, "r")
     data = []
     rl = ds.readline()
 
@@ -52,11 +52,10 @@ def stock_stats(stockName : str):
 
     # Uses mergesort from utils.py
     sorted_dataStock = u.start_mergesort(unsorted_dataStock)
-    print(sorted_dataStock)
 
     # First and last values of the sorted array equals min and max price.
-    minprice = sorted_dataStock[0][2]
-    maxprice = sorted_dataStock[-1][2]
+    minprice = int(sorted_dataStock[0][2])
+    maxprice = int(sorted_dataStock[-1][2])
 
     # Sums all the prices and calculates the mean.
     summedPrice = 0
