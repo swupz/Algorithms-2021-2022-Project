@@ -1,45 +1,64 @@
-import group16.utils as u
+from . import utils
 
-# Global data to store information
-stocks = {}
-sorted_data = []
-
-# Prepare takes the data and sorts it by stock into a dictionary.
+#Prepare takes the file data and stores it in a dictionary ("stocks")
+#In this dictionary, each unique stock name is a key. A key's associated value is a list 
+#comprised of all the stock data associated with that particular key (i.e., stock name)
 def prepare(filename : str):
+    #Prints the name of the file that has been inputted
     print('Reading file {}'.format(filename))
 
-    # Read from file and store into global data
-    global your_variables_here
-    your_variables_here = 'Somebody'
-
-    global ds, data
-    ds = open(filename, "r")
-    data = []
-    rl = ds.readline()
-
-    # Every line of the dataset it put into an array.
-    while rl is not "":
-        frl = rl.split(',')
-        frl[-1] = frl[-1][:0-2]
-        data.append(frl)
-        rl = ds.readline()
-
-    # Everything in the array is put in a dictionary sorted by stock.
-    for set in data:
-        # If the stock has a designated space in the sorted array, add the data there.
-        if set[0] in stocks:
-            sorted_data[stocks[set[0]]].append(set)
-        # If not, makes space for the new stock in the sorted array and
-        # saves the new stock and index for the sorted array.
+    #Global variables
+    global file, stocks, totals
+        
+    #The file
+    file = open(filename, "r")
+    #The stocks dictionary
+    stocks = {}
+    #The totals dictionary
+    #it stores the sum of all prices for a particular stock
+    #the stock name is the key and the value is the sum of all prices for that stock
+    totals = {}
+    #The first line of the file
+    fileLine = file.readline()
+    
+    #While the current line of the file is not empty (i.e, we haven't reached the end of the file yet)
+    while fileLine != "":
+        #The current line of the file is split by "," and the output is a list of 4 items
+        record = fileLine.split(',')
+        record[-1] = record[-1][:0-2]
+                
+        #If the stock name is already a key in the stocks dictionary, simply add the new 
+        #record to the list that is the value for that stock's key
+        if record[0] in stocks.keys():
+            stocks[record[0]].append(record)
+            
+            #Add the record's price to the particular stock's sum of all prices
+            totals[record[0]] = int(record[2]) + totals[record[0]]
+            
+        #If the stock name is not a key in the stocks dictionary, first create it as a key
+        #in the stocks dictionary and set its value to an empty list
+        #then, add the new record to that empty list
         else:
-            stocks[set[0]] = len(stocks)
-            sorted_data.append([set])
-
+            stocks[record[0]] = []
+            stocks[record[0]].append(record)
+            
+            #Create a key also in totals and set its value to the current record's price
+            totals[record[0]] = int(record[2])
+            
+        #Read the next line of the file             
+        fileLine = file.readline()
+    
+    #Sort only the necessary stocks 
+    #NOTE: we will modify this later
+    #stocks["AAPL"] = utils.start_mergesort(stocks["AAPL"])
+    #stocks["FB"] = utils.start_mergesort(stocks["FB"])
+    #stocks["TSLA"] = utils.start_mergesort(stocks["TSLA"])    
+    
+    #Indicate that the prepare function is finished 
     print('Done'.format(filename))
 
 
 # Stock stats takes in specified stockname and returns min, mean and max price.
-# First it sorts the stock data by price, and then finds the min, mean and max.
 def stock_stats(stockName : str):
     print('Searching min, max, and mean price of stock : {}'.format(stockName))
 
@@ -47,24 +66,11 @@ def stock_stats(stockName : str):
     meanprice = 0
     maxprice = 0
 
-    # Get the global data extracted in the prepare function.
-    unsorted_dataStock = sorted_data[stocks[stockName]]
-
-    # Uses mergesort from utils.py
-    sorted_dataStock = u.start_mergesort(unsorted_dataStock)
-
     # First and last values of the sorted array equals min and max price.
-    minprice = int(sorted_dataStock[0][2])
-    maxprice = int(sorted_dataStock[-1][2])
-
-    # Sums all the prices and calculates the mean.
-    summedPrice = 0
-    for data in sorted_dataStock:
-        summedPrice += int(data[2])
-
-    meanprice = summedPrice / len(sorted_dataStock)
-
-
+    minprice = int(stocks[stockName][0][2])
+    maxprice = int(stocks[stockName][-1][2])
+    meanprice = round(int(totals[stockName])/len(stocks[stockName]),2)
+    
     print("Min-price : {}, Mean-Price : {}, Max-Price : {} for stock : {}".format(minprice, meanprice, maxprice, stockName))
 
     # NOTE: please return these value with the following order: min, mean, max
