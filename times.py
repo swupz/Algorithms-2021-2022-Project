@@ -1,11 +1,7 @@
 import importlib
 from time import perf_counter
-from private import proutils
+#from private import proutils
 import sys, os
-from cachetools import cached, TTLCache
-
-#implementation of caching
-cache = TTLCache(maxsize=50, ttl=5000)
 
 # put here your group id
 your_group = 16
@@ -17,9 +13,7 @@ def blockPrint():
 # Restore
 def enablePrint():
     sys.stdout = sys.__stdout__
-
 #-------------------------------------------# Proj v1 #-------------------------------------------#
-@cached(cache)
 def test_v1(gid, filename, stock="AAPL", num_queries=1):
     g = importlib.import_module('group{}.project'.format(gid))
     start = perf_counter()
