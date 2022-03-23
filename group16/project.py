@@ -9,7 +9,7 @@ def prepare(filename : str):
     print('Reading file {}'.format(filename))
 
     #Global variables
-    global file, stocks, totals, mins, maxs
+    global file, stocks, means, mins, maxs
         
     #The file
     file = open(filename, "r")
@@ -17,10 +17,12 @@ def prepare(filename : str):
     #The stocks dictionary
     stocks = {}
     
-    #The totals dictionary
-    #it stores the sum of all prices for a particular stock
-    #the stock name is the key and the value is the sum of all prices for that stock
-    totals = {}
+    #The means dictionary
+    #first, it will store the sum of all prices for a particular stock
+    #the stock name will be the key and the value will be the sum of all prices for that stock
+    #after the dictionary is populated like this, each stock price sum will be divided 
+    #by the number of records for that stock, yielding a dictionary of mean prices for each stock
+    means = {}
     
     #The min and max dictionaries
     #they store the minimum price and maximum price (respectively) for each stock
@@ -43,7 +45,7 @@ def prepare(filename : str):
             stocks[record[0]].append(record)
             
             #Add the record's price to the particular stock's sum of all prices
-            totals[record[0]] = int(record[2]) + totals[record[0]]
+            means[record[0]] = int(record[2]) + means[record[0]]
             
             #if the current record's price is less than the current recorded minimum 
             #for that particular stock
@@ -64,8 +66,8 @@ def prepare(filename : str):
             stocks[record[0]] = []
             stocks[record[0]].append(record)
             
-            #Create a key also in totals and set its value to the current record's price
-            totals[record[0]] = int(record[2])
+            #Create a key also in means and set its value to the current record's price
+            means[record[0]] = int(record[2])
             #Create a key also in mins and set its value to the current record's price
             mins[record[0]] = int(record[2])
             #Create a key also in maxs and set its value to the current record's price
@@ -73,9 +75,10 @@ def prepare(filename : str):
             
         #Read the next line of the file             
         fileLine = file.readline()
-
+    
+    #Calculate the mean price for each stock and store the result in the means dictionary
     for stock in stocks.keys():
-        totals[stock] =  round(int(totals[stock])/len(stocks[stock]),2)
+        means[stock] =  round(int(means[stock])/len(stocks[stock]),2)
     
     #Indicate that the prepare function is finished 
     print('Done'.format(filename))
@@ -90,11 +93,10 @@ def stock_stats(stockName : str):
 
     minprice = mins[stockName]
     maxprice = maxs[stockName]
-    #meanprice = round(int(totals[stockName])/len(stocks[stockName]),2)
+    meanprice = means[stockName]
     
     print("Min-price : {}, Mean-Price : {}, Max-Price : {} for stock : {}".format(minprice, meanprice, maxprice, stockName))
 
     # NOTE: please return these value with the following order: min, mean, max
     return minprice, meanprice, maxprice
-
 
