@@ -87,10 +87,6 @@ def prepare(filename : str):
 def stock_stats(stockName : str):
     print('Searching min, max, and mean price of stock : {}'.format(stockName))
 
-    minprice = 0
-    meanprice = 0
-    maxprice = 0
-
     minprice = mins[stockName]
     maxprice = maxs[stockName]
     meanprice = means[stockName]
@@ -99,4 +95,3 @@ def stock_stats(stockName : str):
 
     # NOTE: please return these value with the following order: min, mean, max
     return minprice, meanprice, maxprice
-
