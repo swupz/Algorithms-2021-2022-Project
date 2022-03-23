@@ -74,6 +74,9 @@ def prepare(filename : str):
         #Read the next line of the file             
         fileLine = file.readline()
 
+    for stock in stocks.keys():
+        totals[stock] =  round(int(totals[stock])/len(stocks[stock]),2)
+    
     #Indicate that the prepare function is finished 
     print('Done'.format(filename))
     
@@ -87,7 +90,7 @@ def stock_stats(stockName : str):
 
     minprice = mins[stockName]
     maxprice = maxs[stockName]
-    meanprice = round(int(totals[stockName])/len(stocks[stockName]),2)
+    #meanprice = round(int(totals[stockName])/len(stocks[stockName]),2)
     
     print("Min-price : {}, Mean-Price : {}, Max-Price : {} for stock : {}".format(minprice, meanprice, maxprice, stockName))
 
